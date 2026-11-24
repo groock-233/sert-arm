@@ -1,48 +1,128 @@
-<!doctype html>
-<html lang="pt-BR" data-theme="light">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="light dark" />
-    <title>Modelo de Jogo — Jogos VR</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="app">
-      <header class="top">
-        <div>
-          <span class="kicker">Modelo</span>
-          <h1 id="title">Clique no Alvo</h1>
-          <p class="subtitle">Troque este jogo pelo seu. O contrato já está pronto.</p>
-        </div>
-        <button id="restart" class="btn" type="button">Reiniciar</button>
-      </header>
-
-      <main>
-        <div class="hud">
-          <span class="pill">Alvos: <strong id="score">0</strong>/<span id="total">10</span></span>
-          <span class="pill">Tempo: <strong id="timer">0,0s</strong></span>
-        </div>
-
-        <div id="board" class="board" aria-label="Área do jogo">
-          <p id="start-hint" class="start-hint">Clique no alvo para começar</p>
-        </div>
-      </main>
-
-      <footer class="bottom">
-        <p>Este é o arquivo <code>game.js</code>. Leia os comentários e adapte.</p>
-      </footer>
-    </div>
-
-    <div id="result" class="overlay" hidden>
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="result-title">
-        <div class="modal-icon" aria-hidden="true">🎯</div>
-        <h2 id="result-title">Muito bem!</h2>
-        <p id="result-text">Você concluiu o jogo.</p>
-        <button id="play-again" class="btn btn-primary full" type="button">Jogar de novo</button>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lanche &amp; Língua</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container" id="app">
+    <!-- Cabeçalho do jogo com placar e controles -->
+    <header class="topo">
+      <div class="titulo-grupo">
+        <h1>🍔 Lanche &amp; Língua</h1>
+        <p class="subtitulo">Atenda bem em bom português e chegue aos 100 Trilhões!</p>
       </div>
-    </div>
+      <div class="controles-topo">
+        <button type="button" id="btn-tema" class="btn-icone" aria-label="Alternar tema claro ou escuro">
+          🌓 Tema
+        </button>
+        <button type="button" id="btn-tela-cheia" class="btn-icone" aria-label="Alternar tela cheia">
+          ⛶ Tela
+        </button>
+      </div>
+    </header>
 
-    <script src="game.js"></script>
-  </body>
+    <!-- Painel de progresso (Cliente atual e Dinheiro acumulado) -->
+    <section class="painel-status" aria-label="Progresso da lanchonete">
+      <div class="status-card">
+        <span class="status-label">Cliente</span>
+        <strong id="texto-rodada">1 / 10</strong>
+      </div>
+      <div class="status-card destaque">
+        <span class="status-label">Caixa (Meta: 100 Tri)</span>
+        <strong id="texto-dinheiro">R$ 0 Tri</strong>
+      </div>
+      <div class="status-card">
+        <span class="status-label">Bônus Ativo</span>
+        <strong id="texto-bonus">1x Normal</strong>
+      </div>
+    </section>
+
+    <!-- Tela Inicial -->
+    <section id="tela-inicio" class="cartao tela ativa">
+      <h2>Bem-vindo à Lanchonete do 8º B!</h2>
+      <p>
+        Os clientes vão fazer pedidos misturando <strong>português</strong> e <strong>inglês</strong>.
+        Seu desafio é:
+      </p>
+      <ul class="lista-regras">
+        <li>1. Ler o pedido do cliente com atenção.</li>
+        <li>2. Escolher a <strong>resposta educada e correta em português</strong> (sem estrangeirismos desnecessários).</li>
+        <li>3. Selecionar os <strong>ingredientes certos</strong> para montar o lanche e a bebida.</li>
+        <li>4. Comprar melhorias na lojinha para alcançar <strong>R$ 100 Trilhões</strong>!</li>
+      </ul>
+      <button type="button" id="btn-comecar" class="btn-principal">Abrir a Lanchonete 🚀</button>
+    </section>
+
+    <!-- Tela Principal do Jogo (Atendimento) -->
+    <section id="tela-jogo" class="cartao tela" aria-live="polite">
+      <div class="cliente-box">
+        <div class="avatar-cliente" id="avatar-cliente" aria-hidden="true">🧑</div>
+        <div class="balao-fala">
+          <span class="etiqueta-idioma" id="etiqueta-idioma">Pedido do Cliente</span>
+          <p id="fala-cliente" class="texto-pedido">Carregando pedido...</p>
+        </div>
+      </div>
+
+      <!-- Passo 1: Escolher a resposta em Português -->
+      <div class="etapa-atendimento">
+        <h3>1. Como você responde em bom português?</h3>
+        <div id="opcoes-resposta" class="grade-opcoes"></div>
+      </div>
+
+      <!-- Passo 2: Montar o lanche e a bebida -->
+      <div class="etapa-atendimento">
+        <h3>2. Escolha os itens do pedido (<span id="contador-itens">0 selecionados</span>):</h3>
+        <div id="opcoes-ingredientes" class="grade-ingredientes"></div>
+      </div>
+
+      <div class="acoes-rodada">
+        <button type="button" id="btn-limpar" class="btn-secundario">Limpar Bandeja</button>
+        <button type="button" id="btn-entregar" class="btn-principal">Entregar Pedido ✅</button>
+      </div>
+    </section>
+
+    <!-- Tela de Feedback da Rodada + Lojinha -->
+    <section id="tela-feedback" class="cartao tela" aria-live="polite">
+      <div id="caixa-resultado" class="resultado-box">
+        <h2 id="titulo-resultado">Pedido Entregue!</h2>
+        <p id="explicacao-resultado"></p>
+        <p id="ganho-rodada" class="valor-ganho"></p>
+      </div>
+
+      <!-- Lojinha de melhorias para ajudar o atendente -->
+      <div id="area-loja" class="loja-box">
+        <h3>🛒 Lojinha de Melhorias da Lanchonete</h3>
+        <p class="loja-dica">Invista seus trilhões para lucrar mais nos próximos clientes!</p>
+        <div class="grade-loja">
+          <button type="button" id="btn-upgrade-chapa" class="btn-loja">
+            <strong>🔥 Chapa Turbo (R$ 15 Tri)</strong>
+            <span>Multiplica seus ganhos por 2x!</span>
+          </button>
+          <button type="button" id="btn-upgrade-balcao" class="btn-loja">
+            <strong>⭐ Balcão VIP (R$ 30 Tri)</strong>
+            <span>Multiplica seus ganhos por 3x!</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="button" id="btn-proximo" class="btn-principal">Próximo Cliente ➡️</button>
+    </section>
+
+    <!-- Tela Final -->
+    <section id="tela-fim" class="cartao tela" aria-live="polite">
+      <h2 id="titulo-final">Fim do Expediente!</h2>
+      <p id="mensagem-final" class="texto-final"></p>
+      <div class="resumo-final">
+        <p><strong>Total Acumulado:</strong> <span id="final-dinheiro">R$ 0 Tri</span></p>
+        <p><strong>Pedidos Perfeitos:</strong> <span id="final-acertos">0 de 10</span></p>
+      </div>
+      <button type="button" id="btn-reiniciar" class="btn-principal">Jogar Novamente 🔄</button>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
 </html>

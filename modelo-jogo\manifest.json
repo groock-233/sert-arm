@@ -1,16 +1,16 @@
 {
-  "slug": "meu-jogo",
-  "title": "Nome do meu jogo",
-  "author": "Seu nome",
-  "authorClass": "Sua turma",
-  "discipline": "Matemática",
-  "grades": ["6º", "7º"],
-  "tags": ["palavra-chave", "outra-palavra"],
-  "description": "Uma frase curta que explica o que o jogo ensina.",
-  "instructions": "Como jogar, em uma ou duas frases.",
-  "duration": 5,
+  "slug": "lanche-e-lingua",
+  "title": "Lanche & Língua",
+  "author": "Aluno do Bruno",
+  "authorClass": "Grupinho do 8B",
+  "discipline": "Língua Portuguesa",
+  "grades": ["6º ano", "7º ano", "8º ano", "9º ano"],
+  "tags": ["portugues", "estrangeirismos", "lanchonete", "interpretacao", "norma-padrao"],
+  "description": "Atenda clientes na lanchonete entendendo pedidos em português e inglês, respondendo na norma padrão do português e montando os lanches certos para juntar 100 trilhões.",
+  "instructions": "Leia o pedido do cliente, escolha a resposta adequada em português sem estrangeirismos desnecessários, selecione os ingredientes corretos na bandeja e use a lojinha entre as rodadas para multiplicar seus ganhos.",
+  "duration": "3 min",
   "version": "1.0.0",
   "entry": "index.html",
   "cover": "cover.svg",
-  "createdAt": "2026-11-02"
+  "createdAt": "2026-11-24"
 }
